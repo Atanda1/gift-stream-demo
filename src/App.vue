@@ -15,15 +15,20 @@ export default {
     onMounted(async () => {
       const { ethereum } = window;
       const { state } = connect();
+      if (!ethereum.isConnected()) {
+        state.status = false;
+        state.address = "";
+        localStorage.removeItem("userState");
+      }
       console.log(state.status);
-        ethereum.on("accountsChanged", (accounts) => {
-          if (accounts.length < 1) {
+      ethereum.on("accountsChanged", (accounts) => {
+        if (accounts.length < 1) {
           console.log("disconnected");
           state.status = false;
           state.address = "";
           localStorage.removeItem("userState");
-          }
-        });
+        }
+      });
     });
   },
 };
